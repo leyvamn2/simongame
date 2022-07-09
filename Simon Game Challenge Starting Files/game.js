@@ -13,6 +13,7 @@ $(".btn").click(function(){
     playSound(name);
     animatePress(name);
     if(userClickerPattern.length==gamePattern.length){
+        
         checkanswer(level)
     }
 
@@ -20,6 +21,7 @@ $(".btn").click(function(){
 
 
 function NextSequence(){
+    $('#level-title').text("Level "+level); 
     userClickerPattern=[]
     randomNumber=Math.floor(Math.random()*4)
     
@@ -34,8 +36,7 @@ function NextSequence(){
 }
 
 function playSound(sn){
-    self.name=sn;
-    var audio = new Audio("sounds/" + self.name + ".mp3");
+    var audio = new Audio("sounds/" + sn + ".mp3");
     audio.play();
 }
 
@@ -59,7 +60,7 @@ function checkanswer(currentLevel){
                 console.log("finished level");
                 console.log(gamePattern+" "+userClickerPattern); 
                 level=level+1;
-                $('#level-title').text("Level "+level); 
+                
                 setTimeout(function () {
                     NextSequence();
                   }, 1000);
@@ -68,9 +69,26 @@ function checkanswer(currentLevel){
             
         }
         else{
-            alert("end");
-
+            if(i==currentLevel){
+                setTimeout(function(){
+                    $('#level-title').text("Game Over, Press Any Key to Restart"); 
+                    playSound("wrong");
+                    $('body').addClass("game-over");
+                    setTimeout(function () {
+                        $('body').removeClass("game-over");
+                      }, 200);
+        
+                },400);
+                startOver();
+    
+            }
         }
         
     }
 }  
+
+function startOver(){
+    level=0;
+    gamePattern=[];
+    userClickerPattern=[];
+}
